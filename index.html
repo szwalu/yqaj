@@ -87,14 +87,18 @@ img{display:block;max-width:100%}
    radial-gradient(34% 40% at 82% 58%,oklch(88% .06 30/.5),transparent 70%),
    radial-gradient(40% 36% at 50% 88%,oklch(90% .05 250/.55),transparent 72%)}
 .hero .wrap{position:relative;z-index:1}
-.kicker{display:inline-flex;align-items:center;gap:14px;font-size:17px;font-weight:500;letter-spacing:.04em;color:var(--ink-2);margin-bottom:28px}
+.kicker{display:inline-flex;align-items:flex-start;gap:14px;font-size:17px;font-weight:500;letter-spacing:.04em;color:var(--ink-2);margin-bottom:28px}
 .kicker b{font-weight:500;color:var(--ink-3);margin:0 .8em}
 @media(max-width:560px){.kicker{font-size:15px;gap:10px}.kicker::before,.kicker::after{width:16px}.kicker b{margin:0 .55em}}
 .kicker i{font-style:normal;color:var(--ink-3);transition:color .5s}
 .rv.in .kicker i,.kicker.in i{animation:idot .6s forwards;animation-delay:calc(.5s + var(--n)*.22s)}
 @keyframes idot{to{color:#E36B1F}}
 @media (prefers-reduced-motion:reduce){.kicker i{color:#E36B1F;animation:none!important}}
-.kicker::before,.kicker::after{content:"";width:28px;height:1px;background:var(--ink-3);opacity:.6}
+.kicker::before,.kicker::after{content:"";width:28px;height:1px;background:var(--ink-3);opacity:.6;margin-top:.8em}
+.ks{display:flex;align-items:flex-start}
+.syl{display:flex;flex-direction:column;align-items:center;line-height:1.5}
+.hz{font-size:.78em;font-weight:400;letter-spacing:0;color:var(--ink-3);margin-top:3px}
+.kicker b{line-height:1.5}
 .hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(42px,7.4vw,100px);line-height:1.14;letter-spacing:.015em}
 .hero h1 em{font-style:normal;color:#E36B1F}
 .hero .sub{max-width:640px;margin:30px auto 0;font-size:clamp(16px,1.6vw,20px);color:var(--ink-2);line-height:1.95}
@@ -312,7 +316,7 @@ a.store:hover{transform:translateY(-3px);box-shadow:0 18px 30px -18px oklch(25% 
 <!-- ============ Hero ============ -->
 <section class="hero">
   <div class="wrap">
-    <p class="kicker rv" aria-label="Yi Qi Ai Ji，一起爱记"><span>Y<i style="--n:0">i</i><b>·</b>Q<i style="--n:1">i</i><b>·</b>A<i style="--n:2">i</i><b>·</b>J<i style="--n:3">i</i></span></p>
+    <p class="kicker rv" aria-label="Yi Qi Ai Ji，一起爱记"><span class="ks"><span class="syl"><span class="py">Y<i style="--n:0">i</i></span><span class="hz">一</span></span><b>·</b><span class="syl"><span class="py">Q<i style="--n:1">i</i></span><span class="hz">起</span></span><b>·</b><span class="syl"><span class="py">A<i style="--n:2">i</i></span><span class="hz">爱</span></span><b>·</b><span class="syl"><span class="py">J<i style="--n:3">i</i></span><span class="hz">记</span></span></span></p>
     <h1 class="rv" style="--d:.08s">把值得记住的，<br>一起<em>记</em>下来。</h1>
     <p class="sub rv" style="--d:.16s">我们做三件认真的小工具：记下生活里的每一天，记住每一个单词，记熟每一首古诗。简单、克制，只把一件事做好。</p>
     <div class="ctas rv" style="--d:.24s">
