@@ -107,11 +107,17 @@ img{display:block;max-width:100%}
 .hero-apps a{display:inline-flex;align-items:center;gap:10px;transition:color .2s,transform .2s}
 .hero-apps a:hover{color:var(--ink);transform:translateY(-2px)}
 
-.stage{position:relative;display:flex;justify-content:center;align-items:flex-end;margin-top:72px;height:clamp(300px,52vw,640px);overflow:hidden}
-.stage .phone{flex:none;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
-.stage .p-l{--pw:clamp(118px,19vw,250px);margin-right:calc(var(--pw)*-.1);transform:translateY(14%)}
-.stage .p-c{--pw:clamp(136px,23vw,300px);position:relative;z-index:2;transform:translateY(8%)}
-.stage .p-r{--pw:clamp(118px,19vw,250px);margin-left:calc(var(--pw)*-.1);transform:translateY(14%)}
+.stage{position:relative;margin-top:72px;height:clamp(300px,52vw,640px);overflow:hidden;--pw:clamp(136px,23vw,300px);touch-action:pan-y;-webkit-user-select:none;user-select:none}
+.stage .phone{--pw:inherit;position:absolute;left:50%;bottom:0;width:var(--pw);transform-origin:50% 100%;transition:transform .8s cubic-bezier(.2,.7,.2,1),opacity .5s;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.stage .phone img{pointer-events:none;-webkit-user-drag:none}
+.stage .phone[data-pos=c]{z-index:2;cursor:default;transform:translate(-50%,8%)}
+.stage .phone[data-pos=l]{z-index:1;transform:translate(calc(-50% - var(--pw)*.83),14%) scale(.84)}
+.stage .phone[data-pos=r]{z-index:1;transform:translate(calc(-50% + var(--pw)*.83),14%) scale(.84)}
+.stage .phone:focus-visible{outline:2px solid #E36B1F;outline-offset:4px}
+.hero-apps a.on{color:var(--ink);font-weight:500}
+.hero-apps a .appicon{transition:transform .3s,box-shadow .3s}
+.hero-apps a.on .appicon{transform:scale(1.12);box-shadow:0 0 0 2px var(--paper),0 0 0 3.5px #E36B1F}
+@media (prefers-reduced-motion:reduce){.stage .phone{transition:none}}
 
 /* ---------- 手机外框 ---------- */
 .phone{width:var(--pw,280px);background:#15130f;padding:calc(var(--pw,280px)*.034);border-radius:calc(var(--pw,280px)*.17);box-shadow:0 0 0 1.5px #4a4540 inset,0 40px 80px -30px oklch(25% .04 50/.55),0 18px 30px -18px oklch(25% .04 50/.4)}
@@ -323,15 +329,15 @@ a.store:hover{transform:translateY(-3px);box-shadow:0 18px 30px -18px oklch(25% 
       <a class="btn btn--accent btn--xl" href="#download"><svg viewBox="0 0 24 24"><path d="M12 4v11m0 0l-5-5m5 5l5-5M5 20h14"/></svg>获取下载</a>
     </div>
     <div class="hero-apps rv" style="--d:.32s">
-      <a href="#jmsp"><span class="appicon" style="--s:28px"><img src="logo-jimaosuanpi.png" alt=""></span>鸡毛蒜皮</a>
-      <a href="#cicibuwang"><span class="appicon" style="--s:28px"><img src="logo-cicibuwang.svg" alt="词词不忘"></span>词词不忘</a>
-      <a href="#shici"><span class="appicon" style="--s:28px"><img src="logo-yiqi-shici.png" alt=""></span>爱记古诗词</a>
+      <a href="#jmsp" data-app="0" class="on"><span class="appicon" style="--s:28px"><img src="logo-jimaosuanpi.png" alt=""></span>鸡毛蒜皮</a>
+      <a href="#cicibuwang" data-app="1"><span class="appicon" style="--s:28px"><img src="logo-cicibuwang.svg" alt="词词不忘"></span>词词不忘</a>
+      <a href="#shici" data-app="2"><span class="appicon" style="--s:28px"><img src="logo-yiqi-shici.png" alt=""></span>爱记古诗词</a>
     </div>
 
-    <div class="stage rv" style="--d:.4s">
-      <div class="phone p-l"><img src="shot-cicibuwang.jpg" alt="词词不忘 学习页面"></div>
-      <div class="phone p-c"><img src="shot-jmsp-home.jpg" alt="鸡毛蒜皮 首页"></div>
-      <div class="phone p-r"><img src="shot-shici.jpg" alt="爱记古诗词 今日页面"></div>
+    <div class="stage rv" style="--d:.4s" id="stage" role="region" aria-roledescription="轮播" aria-label="三款应用首页预览" tabindex="0">
+      <div class="phone" data-pos="l" data-app="1" role="button" tabindex="0" aria-label="查看 词词不忘"><img src="shot-cicibuwang.jpg" alt="词词不忘 学习页面"></div>
+      <div class="phone" data-pos="c" data-app="0"><img src="shot-jmsp-home.jpg" alt="鸡毛蒜皮 首页"></div>
+      <div class="phone" data-pos="r" data-app="2" role="button" tabindex="0" aria-label="查看 爱记古诗词"><img src="shot-shici.jpg" alt="爱记古诗词 今日页面"></div>
     </div>
   </div>
 </section>
@@ -608,6 +614,68 @@ a.store:hover{transform:translateY(-3px);box-shadow:0 18px 30px -18px oklch(25% 
     es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
   },{threshold:.12,rootMargin:'0px 0px -6% 0px'});
   els.forEach(function(e){io.observe(e)});
+})();
+</script>
+<script>
+(function(){
+  var stage=document.getElementById('stage');if(!stage)return;
+  var ph=[].slice.call(stage.querySelectorAll('.phone'));
+  var links=[].slice.call(document.querySelectorAll('.hero-apps a[data-app]'));
+  var pos=['l','c','r'];                 // 当前每部手机所处位置
+  var names=['鸡毛蒜皮','词词不忘','爱记古诗词'];
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
+  function apply(wrapIdx){
+    ph.forEach(function(el,i){
+      var np=pos[i];
+      if(i===wrapIdx){el.style.transition='none';el.style.opacity='0'}
+      el.dataset.pos=np;
+      var c=np==='c';
+      if(c){el.removeAttribute('role');el.removeAttribute('tabindex');el.removeAttribute('aria-label')}
+      else{el.setAttribute('role','button');el.tabIndex=0;el.setAttribute('aria-label','查看 '+names[+el.dataset.app]);}
+    });
+    if(wrapIdx>-1){void stage.offsetWidth;var w=ph[wrapIdx];w.style.transition='';w.style.opacity=''}
+    var cur=ph[pos.indexOf('c')].dataset.app;
+    links.forEach(function(a){a.classList.toggle('on',a.dataset.app===cur)});
+  }
+  function initPos(){ph.forEach(function(el,i){pos[i]=el.dataset.pos})}
+  function step(dir){ // dir=1：右边的来到中间
+    var wrap=-1;
+    var np=pos.map(function(p,i){
+      if(dir>0){if(p==='r'){return 'c'}if(p==='c'){return 'l'}wrap=i;return 'r'}
+      if(p==='l'){return 'c'}if(p==='c'){return 'r'}wrap=i;return 'l'
+    });
+    pos=np;apply(wrap);
+  }
+  function bring(i){ if(pos[i]==='r')step(1);else if(pos[i]==='l')step(-1) }
+  initPos();
+  var timer=null,paused=false,visible=true;
+  function start(){stop();if(reduce)return;timer=setInterval(function(){if(!paused&&visible&&!document.hidden)step(1)},4500)}
+  function stop(){if(timer){clearInterval(timer);timer=null}}
+  stage.addEventListener('mouseenter',function(){paused=true});
+  stage.addEventListener('mouseleave',function(){paused=false});
+  stage.addEventListener('focusin',function(){paused=true});
+  stage.addEventListener('focusout',function(){paused=false});
+  if('IntersectionObserver' in window){new IntersectionObserver(function(es){visible=es[0].isIntersecting},{threshold:.2}).observe(stage)}
+  // 点击两侧
+  var moved=false;
+  ph.forEach(function(el,i){
+    el.addEventListener('click',function(){if(moved)return;bring(i);start()});
+    el.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();bring(i);start()}});
+  });
+  // 左右滑动
+  var sx=null,sy=0;
+  stage.addEventListener('pointerdown',function(e){sx=e.clientX;sy=e.clientY;moved=false;paused=true});
+  stage.addEventListener('pointerup',function(e){
+    if(sx===null)return;var dx=e.clientX-sx,dy=e.clientY-sy;sx=null;
+    if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)){moved=true;step(dx<0?1:-1);start();setTimeout(function(){moved=false},50)}
+    if(e.pointerType!=='mouse')paused=false;
+  });
+  stage.addEventListener('pointercancel',function(){sx=null;paused=false});
+  stage.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'){step(1);start()}else if(e.key==='ArrowLeft'){step(-1);start()}
+  });
+  // 上方应用名：悬停预览不跳转，点击仍然前往对应章节
+  start();
 })();
 </script>
 </body>
