@@ -90,10 +90,10 @@ img{display:block;max-width:100%}
 .kicker{display:inline-flex;align-items:flex-start;gap:14px;font-size:17px;font-weight:500;letter-spacing:.04em;color:var(--ink-2);margin-bottom:28px}
 .kicker b{font-weight:500;color:var(--ink-3);margin:0 .8em}
 @media(max-width:560px){.kicker{font-size:15px;gap:10px}.kicker::before,.kicker::after{width:16px}.kicker b{margin:0 .55em}}
-.kicker i{font-style:normal;color:var(--ink-3);transition:color .5s}
-.rv.in .kicker i,.kicker.in i{animation:idot .6s forwards;animation-delay:calc(.5s + var(--n)*.22s)}
-@keyframes idot{to{color:#E36B1F}}
-@media (prefers-reduced-motion:reduce){.kicker i{color:#E36B1F;animation:none!important}}
+.kicker i{font-style:normal;color:#E36B1F;display:inline-block}
+.kicker.in i{animation:ifly 1.1s cubic-bezier(.2,.85,.25,1.12) both;animation-delay:calc(.55s + var(--n)*.2s)}
+@keyframes ifly{0%{opacity:0;transform:translate(var(--x),var(--y)) rotate(var(--r)) scale(2.2)}25%{opacity:1}100%{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.kicker.in i{animation:none}}
 .kicker::before,.kicker::after{content:"";width:28px;height:1px;background:var(--ink-3);opacity:.6;margin-top:.8em}
 .ks{display:flex;align-items:flex-start}
 .syl{display:flex;flex-direction:column;align-items:center;line-height:1.5}
@@ -316,7 +316,7 @@ a.store:hover{transform:translateY(-3px);box-shadow:0 18px 30px -18px oklch(25% 
 <!-- ============ Hero ============ -->
 <section class="hero">
   <div class="wrap">
-    <p class="kicker rv" aria-label="Yi Qi Ai Ji，一起爱记"><span class="ks"><span class="syl"><span class="py">Y<i style="--n:0">i</i></span><span class="hz">一</span></span><b>·</b><span class="syl"><span class="py">Q<i style="--n:1">i</i></span><span class="hz">起</span></span><b>·</b><span class="syl"><span class="py">A<i style="--n:2">i</i></span><span class="hz">爱</span></span><b>·</b><span class="syl"><span class="py">J<i style="--n:3">i</i></span><span class="hz">记</span></span></span></p>
+    <p class="kicker rv" aria-label="Yi Qi Ai Ji，一起爱记"><span class="ks"><span class="syl"><span class="py">Y<i style="--n:0;--x:-170px;--y:-70px;--r:-40deg">i</i></span><span class="hz">一</span></span><b>·</b><span class="syl"><span class="py">Q<i style="--n:1;--x:40px;--y:-110px;--r:30deg">i</i></span><span class="hz">起</span></span><b>·</b><span class="syl"><span class="py">A<i style="--n:2;--x:90px;--y:80px;--r:50deg">i</i></span><span class="hz">爱</span></span><b>·</b><span class="syl"><span class="py">J<i style="--n:3;--x:190px;--y:-30px;--r:-60deg">i</i></span><span class="hz">记</span></span></span></p>
     <h1 class="rv" style="--d:.08s">把值得记住的，<br>一起<em>记</em>下来。</h1>
     <p class="sub rv" style="--d:.16s">我们做三件认真的小工具：记下生活里的每一天，记住每一个单词，记熟每一首古诗。简单、克制，只把一件事做好。</p>
     <div class="ctas rv" style="--d:.24s">
